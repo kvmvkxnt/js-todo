@@ -4,7 +4,6 @@ var elList = document.querySelector('.todo__list');
 var clearButton = document.querySelector('.todo__clear');
 var tasksLeft = document.querySelector('.todo__left');
 var taskFilter = document.querySelector('.todo__filter');
-var elDeleteTask = document.querySelectorAll('.todo__button');
 var uncompletedTasks = [];
 
 elForm.addEventListener('submit', handleFormSubmitter);
@@ -28,37 +27,26 @@ function createNewElement() {
         newItem.innerHTML = `<label class="todo__label"><input type="checkbox" class="todo__checkbox visually-hidden"><span class="todo__check"></span><p class="todo__task">${newTask}</p></label><button class="todo__button"><img src="../images/x.svg" alt="Check"></button>`;
         elList.appendChild(newItem);
 
-        var elDeleteTask = document.querySelectorAll('.todo__button');
-        for (var i = 0; i < elDeleteTask.length; i++) {
-            elDeleteTask[i].addEventListener('click', function() {
-                var task = document.getElementsByTagName('li');
-                task[i].remove();
-            });
-        }
-
-        var taskLabels = document.querySelectorAll('.todo__label');
-
-        for (var i = 0; i < taskLabels.length; i++) {
-            taskLabels[i].addEventListener('click', function(){
-                var label = this.parentElement;
-                label.classList.toggle('checked');
-            })
-        }
+        var labels = document.querySelectorAll('.todo__label');
     }
-}
 
-for (var i = 0; i < elDeleteTask.length; i++) {
-    elDeleteTask[i].addEventListener('click', function() {
-        var task = document.getElementsByTagName('li');
-        task[i].remove();
-    })
-}
+    var tasks = document.querySelectorAll('.todo__item');
+    if (tasks.length > 0) {
+        taskFilter.style.display = 'flex';
+    } else {
+        taskFilter.style.display = 'none';
+    }
 
-var taskLabels = document.querySelectorAll('.todo__label');
+    var elDeleteTask = document.querySelectorAll('.todo__button');
+    for (var i = 0; i < elDeleteTask.length; i++) {
+        elDeleteTask[i].addEventListener('click', function() {
+            this.parentElement.parentElement.remove();
 
-for (var i = 0; i < taskLabels.length; i++) {
-    taskLabels[i].addEventListener('click', function(){
-        var label = this.parentElement;
-        label.classList.toggle('checked');
-    })
+            if (tasks.length > 0) {
+                taskFilter.style.display = 'flex';
+            } else {
+                taskFilter.style.display = 'none';
+            }
+        })
+    }
 }
