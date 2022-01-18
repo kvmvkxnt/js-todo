@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+    <div class="todo">
+        <div class="container">
+            <div class="todo__inner">
+                <h1 class="todo__heading">todos</h1>
+                <div class="todo__section">
+                    <form class="todo__form">
+                        <button class="todo__arrow"><img src="images/arrow.svg" alt="Complete All"></button>
+                        <input type="text" class="todo__input" placeholder="What needs to be done?">
+                    </form>
+
+                    <ul class="todo__list">
+                        <li class="todo__item" onmouseover="this.querySelector('.todo__button').style.visibility = 'visible'" onmouseout="this.querySelector('.todo__button').style.visibility = 'hidden'">
+                            <label class="todo__label">
+                                <input type="checkbox" class="todo__checkbox visually-hidden">
+                                <span class="todo__check"></span>
+                                <p class="todo__task">${newTask}</p>
+                            </label>
+                            <button class="todo__button"><img src="../images/x.svg" alt="Check"></button>
+                        </li>
+                    </ul>
+
+                    <div class="todo__filter">
+                        <p class="todo__left">0 items left</p>
+
+                        <div class="todo__menu">
+                            <button class="todo__menu__button" id="todo_all">All</button>
+                            <button class="todo__menu__button" id="todo_active">Active</button>
+                            <button class="todo__menu__button" id="todo_completed">Completed</button>
+                        </div>
+
+                        <button class="todo__clear">Clear completed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
