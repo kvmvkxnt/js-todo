@@ -48,13 +48,7 @@ function createNewElement() {
         }
     }
 
-    var labels = document.querySelectorAll('.todo__label');
-    console.log(labels);
-    for (var i = 0; i < labels.length; i++) {
-        labels[i].addEventListener('click', function() {
-            labelFunc(this);
-        })
-    }
+    // Need to remake labelFunctio - problem: gettiing self and labels under twice
 
     var tasks = document.querySelectorAll('.todo__item');
     if (tasks.length > 0) {
