@@ -26,8 +26,14 @@ function createNewElement() {
         newItem.setAttribute("onmouseout", "this.querySelector('.todo__button').style.visibility = 'hidden'");
         newItem.innerHTML = `<label class="todo__label"><input type="checkbox" class="todo__checkbox visually-hidden"><span class="todo__check"></span><p class="todo__task">${newTask}</p></label><button class="todo__button"><img src="../images/x.svg" alt="Check"></button>`;
         elList.appendChild(newItem);
+    }
 
-        var labels = document.querySelectorAll('.todo__label');
+    var labels = document.querySelectorAll('.todo__label');
+    for (var i = 0; i < labels.length; i++) {
+        labels[i].addEventListener('click', function(){
+            var labelTask = labels[i].parentElement;
+            labelTask.classList.toggle('checked');
+        })
     }
 
     var tasks = document.querySelectorAll('.todo__item');
@@ -40,8 +46,9 @@ function createNewElement() {
     var elDeleteTask = document.querySelectorAll('.todo__button');
     for (var i = 0; i < elDeleteTask.length; i++) {
         elDeleteTask[i].addEventListener('click', function() {
-            this.parentElement.parentElement.remove();
-
+            this.parentElement.remove();
+            
+            var tasks = document.querySelectorAll('.todo__item');
             if (tasks.length > 0) {
                 taskFilter.style.display = 'flex';
             } else {
