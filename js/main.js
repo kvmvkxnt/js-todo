@@ -73,6 +73,7 @@ function createNewElement() {
                 checked += 1;
                 toDoLeft();
                 clearDisplay();
+                filterDisplay()
                 var listClasses = elList.className.split(' ');
                 if (listClasses.includes('only-active')) {
                     checksItem.style.display = 'none';
@@ -89,6 +90,7 @@ function createNewElement() {
                 toDoLeft();
                 clearDisplay();
                 filterFinder(checksItem);
+                filterDisplay();
             }
         });
     }
