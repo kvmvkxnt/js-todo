@@ -121,7 +121,7 @@ p {
 
 .todo__task {
     margin-left: 20px;
-    white-space: pre-line;
+    word-break: break-all;
     transition: opacity 0.3s, text-decoration 0.3s;
 }
 
@@ -161,6 +161,9 @@ p {
     font-size: 14px;
     color: lightgray;
     padding: 2;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 2px;
 }
 
 .todo__clear {
@@ -170,6 +173,7 @@ p {
     background-color: transparent;
     padding: 0;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .todo__clear:hover {
