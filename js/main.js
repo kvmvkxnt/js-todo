@@ -8,6 +8,7 @@ const allTasksFilter = findElement('#todo_all');
 const activeTasksFilter = findElement('#todo_active');
 const elCompleteAll = findElement('.todo__arrow');
 const completedTasksFilter = findElement('#todo_completed');
+const modified = findElement('.todo__modified');
 const elTodoTemplate = findElement('.todo-template').content;
 let currentFilter = 'all';
 
@@ -191,6 +192,20 @@ const filterActive = (clicked) => {
     return active;
 }
 
+const handleModified = (evt) => {
+    clicked = evt.target;
+    if (clicked.matches('#todo_clear_all')) {
+        if (todos.length > 0) {
+            todos.splice(0, todos.length);
+            renderTodos(todos);
+            window.localStorage.removeItem('todos');
+            viewFilters(todos);
+            itemsLeft(todos);
+            updateCounter(todos);
+        } else return;
+    }
+}
+
 const handleFilter = (evt) => {
     const clicked = evt.target;
     if (clicked.matches('.todo__clear')) {
@@ -245,6 +260,7 @@ elForm.addEventListener('submit', handleAddTodo);
 elList.addEventListener('click', handleList);
 elCompleteAll.addEventListener('click', handleCheckAll);
 taskFilter.addEventListener('click', handleFilter);
+modified.addEventListener('click', handleModified);
 
 renderTodos(todos);
 viewFilters(todos);
