@@ -17,7 +17,7 @@
                 <h1 class="todo__heading">todos</h1>
                 <div class="todo__section">
                     <form class="todo__form">
-                        <button class="todo__arrow"><img src="images/arrow.svg" alt="Complete All"></button>
+                        <button class="todo__arrow" type="button">⏏</button>
                         <input type="text" class="todo__input" placeholder="What needs to be done?">
                     </form>
 
@@ -41,6 +41,24 @@
         </div>
     </div>
 
+
+    <template class="todo-template">
+        <li class="todo__item">
+            <label class="todo__label">
+                <input type="checkbox" class="todo__checkbox visually-hidden">
+                <span class="todo__check"></span>
+            </label>
+            <p class="todo__task"></p>
+            <form id="edit_form">
+                <input type="text" class="todo__input todo__edit__input">
+            </form>
+            <button class="todo__button">
+                X
+            </button>
+        </li>
+    </template>
+
+    <script src="./js/utils.js"></script>
     <script src="js/main.js"></script>
 </body>
 
