@@ -9,8 +9,28 @@ const activeTasksFilter = findElement('#todo_active');
 const elCompleteAll = findElement('.todo__arrow');
 const completedTasksFilter = findElement('#todo_completed');
 const elTodoTemplate = findElement('.todo-template').content;
+let currentFilter = 'all';
 
 let todos = JSON.parse(window.localStorage.getItem('todos')) || [];
+
+const updateCounter = (arr) => {
+    let all = arr.length;
+
+    let completed = 0;
+    let active = 0;
+
+    arr.forEach((item) => {
+        if (item.isCompleted) {
+            completed+=1;
+        } else if (!item.isCompleted) {
+            active+=1;
+        }
+    })
+
+    allTasksFilter.textContent = 'All ' + all;
+    activeTasksFilter.textContent = 'Active ' + active;
+    completedTasksFilter.textContent = 'Completed ' + completed;
+}
 
 const handleAddTodo = (evt) => {
     evt.preventDefault();
@@ -25,13 +45,20 @@ const handleAddTodo = (evt) => {
         }
 
         todos.push(newTodo);
-        renderTodos(todos);
+        if (currentFilter == 'all') {
+            filterAll(allTasksFilter);
+        } else if (currentFilter == 'completed') {
+            renderTodos(filterCompleted(completedTasksFilter));
+        } else if (currentFilter == 'active') {
+            renderTodos(filterActive(activeTasksFilter));
+        }
         window.localStorage.setItem('todos', JSON.stringify(todos));
         elInput.value = null;
     }
 
     viewFilters(todos);
     itemsLeft(todos);
+    updateCounter(todos);
 }
 
 const viewFilters = (arr) => {
@@ -65,6 +92,7 @@ const handleDeleteTodo = (id, arr) => {
     window.localStorage.setItem('todos', JSON.stringify(arr));
     viewFilters(arr);
     itemsLeft(arr);
+    updateCounter(arr);
 }
 
 const handleCheckTodo = (id, arr) => {
@@ -76,6 +104,7 @@ const handleCheckTodo = (id, arr) => {
     window.localStorage.setItem('todos', JSON.stringify(arr));
     viewFilters(arr);
     itemsLeft(arr);
+    updateCounter(arr);
 }
 
 const itemsLeft = (arr) => {
@@ -98,6 +127,7 @@ const handleCheckAll = () => {
     window.localStorage.setItem('todos', JSON.stringify(todos));
     viewFilters(todos);
     itemsLeft(todos);
+    updateCounter(todos);
 }
 
 const handleList = (evt) => {
@@ -114,18 +144,51 @@ const handleList = (evt) => {
 }
 
 const handleClearCompleted = (arr) => {
-    arr.forEach((item) => {
-        if (item.isCompleted) {
-            const foundIndex = arr.findIndex((elem) => elem.id === item.id);
-            arr.splice(foundIndex, 1);
-        }
+    arr.filter((todo) => todo.isCompleted).forEach((elem) => {
+        const foundTodoIndex = arr.findIndex((todo) => todo.id === elem.id);
+        arr.splice(foundTodoIndex, 1);
+    })
 
-        renderTodos(arr);
-    });
-
-    window.localStorage.setItem('todos', JSON.stringify(todos));
+    renderTodos(arr);
+    window.localStorage.setItem('todos', JSON.stringify(arr));
     viewFilters(arr);
     itemsLeft(arr);
+    updateCounter(arr);
+}
+
+const filterAll = (clicked) => {
+    activeTasksFilter.style.border = '1px solid transparent';
+    completedTasksFilter.style.border = '1px solid transparent';
+    clicked.style.border = '1px solid orange';
+    renderTodos(todos);
+}
+
+const filterCompleted = (clicked) => {
+    activeTasksFilter.style.border = '1px solid transparent';
+    allTasksFilter.style.border = '1px solid transparent';
+    clicked.style.border = '1px solid orange';
+    const completed = [];
+    todos.forEach((item) => {
+        if (item.isCompleted) {
+            completed.push(item);
+        }
+    })
+
+    return completed; 
+}
+
+const filterActive = (clicked) => {
+    allTasksFilter.style.border = '1px solid transparent';
+    completedTasksFilter.style.border = '1px solid transparent';
+    clicked.style.border = '1px solid orange';
+    const active = [];
+    todos.forEach((item) => {
+        if (item.isCompleted == false) {
+            active.push(item);
+        }
+    });
+
+    return active;
 }
 
 const handleFilter = (evt) => {
@@ -133,35 +196,14 @@ const handleFilter = (evt) => {
     if (clicked.matches('.todo__clear')) {
         handleClearCompleted(todos);
     } else if (clicked.matches('#todo_all')) {
-        activeTasksFilter.style.border = '1px solid transparent';
-        completedTasksFilter.style.border = '1px solid transparent';
-        clicked.style.border = '1px solid orange';
-        renderTodos(todos);
+        currentFilter = 'all';
+        filterAll(clicked);
     } else if (clicked.matches('#todo_completed')) {
-        activeTasksFilter.style.border = '1px solid transparent';
-        allTasksFilter.style.border = '1px solid transparent';
-        clicked.style.border = '1px solid orange';
-        const completed = [];
-        todos.forEach((item) => {
-            if (item.isCompleted) {
-                completed.push(item);
-            }
-        })
-
-        renderTodos(completed); 
-
+        currentFilter = 'completed';
+        renderTodos(filterCompleted(clicked));
     } else if (evt.target.matches('#todo_active')) {
-        allTasksFilter.style.border = '1px solid transparent';
-        completedTasksFilter.style.border = '1px solid transparent';
-        evt.target.style.border = '1px solid orange';
-        const active = [];
-        todos.forEach((item) => {
-            if (item.isCompleted == false) {
-                active.push(item);
-            }
-        });
-
-        renderTodos(active);
+        currentFilter = 'active';
+        renderTodos(filterActive(clicked));
     }
 }
 
@@ -207,3 +249,4 @@ taskFilter.addEventListener('click', handleFilter);
 renderTodos(todos);
 viewFilters(todos);
 itemsLeft(todos);
+updateCounter(todos);
