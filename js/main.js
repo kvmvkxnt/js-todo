@@ -203,6 +203,10 @@ const handleModified = (evt) => {
             itemsLeft(todos);
             updateCounter(todos);
         } else return;
+    } else if (clicked.matches('#todo_modal')) {
+        findElement('.modal').classList.add('modal--active');
+    } else if (clicked.matches('#close_modal')) {
+        findElement('.modal').classList.remove('modal--active');
     }
 }
 
