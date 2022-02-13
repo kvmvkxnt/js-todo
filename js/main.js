@@ -131,6 +131,18 @@ const handleCheckAll = () => {
     updateCounter(todos);
 }
 
+const handleEditTodo = (id) => {
+    const mustEditedTodo = findElement(`[data-todo-id="${id}"]`);
+
+    const paragraph = findElement('.todo__task', mustEditedTodo);
+    const form = findElement('#edit_form', mustEditedTodo);
+    const input = findElement('.todo__edit__input', mustEditedTodo);
+
+    paragraph.style.display = 'none';
+    form.style.display ='block';
+    input.focus();
+}
+
 const handleList = (evt) => {
     const todoId = Number(evt.target.dataset.todoId);
     const target = evt.target;
@@ -226,6 +238,26 @@ const handleFilter = (evt) => {
     }
 }
 
+const handleSubmitList = (evt) => {
+    evt.preventDefault();
+    const submitted = evt.target;
+    const todoId = submitted.dataset.todoId;
+    const paragraph = findElement(`.todo__task[data-todo-id="${todoId}"]`);
+
+    const editInput = findElement('.todo__edit__input', submitted).value;
+
+    if (editInput == null) {
+        alert('No data!')
+    } else {
+        const todo = todos.find((elem) => elem.id == todoId);
+        todo.title = editInput.trim();
+        submitted.style.display = 'none';
+        paragraph.style.display = 'block';
+        window.localStorage.setItem('todos', JSON.stringify(todos));
+        renderTodos(todos);
+    }
+}
+
 const renderTodos = (todos) => {
     elList.innerHTML = null;
 
@@ -237,12 +269,14 @@ const renderTodos = (todos) => {
         const todoTask = findElement('.todo__task', todo);
         const todoCheck = findElement('.todo__checkbox', todo);
         const todoDelete = findElement('.todo__button', todo);
+        const todoEdit = findElement('#edit_form', todo);
 
         todoTask.textContent = item.title;
         todoDelete.dataset.todoId = item.id;
         todoTask.dataset.todoId = item.id;
         todoDelete.parentNode.dataset.todoId = item.id;
         todoCheck.dataset.todoId = item.id;
+        todoEdit.dataset.todoId = item.id;
         
         if (item.isCompleted) {
             todoCheck.checked = true;
@@ -262,6 +296,8 @@ const renderTodos = (todos) => {
 
 elForm.addEventListener('submit', handleAddTodo);
 elList.addEventListener('click', handleList);
+elList.addEventListener('submit', handleSubmitList);
+// elList.addEventListener('focusout', handleFocusOut);
 elCompleteAll.addEventListener('click', handleCheckAll);
 taskFilter.addEventListener('click', handleFilter);
 modified.addEventListener('click', handleModified);
